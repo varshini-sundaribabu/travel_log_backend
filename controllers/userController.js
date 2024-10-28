@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken';
 import db from '../db/knex.js';
 
 export const signup = async (req, res) => {
-  const { first_name, last_name, date_of_birth, email, phone_number, password } = req.body;
+  const { first_name, last_name, date_of_birth, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     await db('users').insert({
-      first_name, last_name, date_of_birth, email, phone_number, password: hashedPassword
+      first_name, last_name, date_of_birth, email, password: hashedPassword
     });
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -22,7 +22,7 @@ export const login = async (req, res) => {
 
   if (user && await bcrypt.compare(password, user.password)) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    res.json({ token, userId: user.id, user });
   } else {
     res.status(401).json({ message: 'Invalid credentials' });
   }
