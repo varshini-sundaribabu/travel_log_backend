@@ -8,10 +8,13 @@ export const signup = async (req, res) => {
 
   try {
     await db('users').insert({
-      first_name, last_name, date_of_birth, email, password: hashedPassword
+      first_name, last_name, email, password: hashedPassword
     });
-    res.status(201).json({ message: 'User created successfully' });
+    const user = await db('users').where({ email }).first();
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({ token, userId: user.id, user  });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
