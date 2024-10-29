@@ -63,7 +63,12 @@ This project is a backend API for a travel journal application, built with Node.
    ```bash
    node index.js
    ```
+1. **Create uploads directory:**
+   Use the following command to create an uploads directory in the project:
 
+   ```bash
+   mkdir uploads
+   ```
    The server should start running on the specified port (default is usually 3000). You can now access the API endpoints.
 
 
